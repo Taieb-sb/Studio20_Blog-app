@@ -1,5 +1,6 @@
 "use client";
- 
+
+import Image from 'next/image'
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "@/app/providers";
 import Link from "next/link";
@@ -10,8 +11,6 @@ import {
   PlusIcon, 
   SunIcon, 
   MoonIcon,
-  UserCircleIcon,
-  BookOpenIcon
 } from "@heroicons/react/24/outline";
  
 export default function Header() {
@@ -31,14 +30,18 @@ export default function Header() {
 <div className="flex h-16 items-center justify-between">
           {/* Logo */}
 <div className="flex items-center space-x-4">
-<Link 
-              href="/" 
-              className="flex items-center space-x-2 font-bold text-xl hover:opacity-80 transition-opacity"
-              style={{ color: "var(--foreground)" }}
->
-<BookOpenIcon className="h-8 w-8" style={{ color: "var(--accent)" }} />
-<span>Studio Blog</span>
-</Link>
+  <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+    <Image
+      src="/studio20-logo.png"
+      alt="Studio20 Logo"
+      width={32}
+      height={32}
+      className="block"
+    />
+    <span className="text-xl font-bold" style={{ color: "var(--foreground)" }}>
+      Studio20 Blog
+    </span>
+  </Link>
 </div>
  
           {/* Desktop Navigation */}
@@ -67,8 +70,8 @@ export default function Header() {
               aria-label="Toggle theme"
 >
               {theme === "light" ? 
-<MoonIcon className="h-5 w-5" /> : 
-<SunIcon className="h-5 w-5" />
+<MoonIcon className="h-3 w-3" /> : 
+<SunIcon className="h-3 w-3" />
               }
 </button>
  
@@ -89,7 +92,7 @@ export default function Header() {
 </span>
 </div>
 <button
-                  onClick={() => signOut()}
+                  onClick={() => signOut({ callbackUrl: "/" })}
                   className="btn btn-secondary text-sm"
 >
                   Sign out

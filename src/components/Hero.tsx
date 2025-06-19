@@ -2,7 +2,7 @@
  
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { PencilIcon, BookOpenIcon, UsersIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, BookOpenIcon, UsersIcon } from "@heroicons/react/24/outline";
  
 export default function Hero() {
   const { data: session } = useSession();
@@ -22,38 +22,7 @@ export default function Hero() {
 </div>
  
       <div className="max-w-4xl mx-auto text-center relative">
-        {/* Main heading */}
-<div className="mb-6 animate-fade-in">
-<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
-<span style={{ color: "var(--foreground)" }}>
-              Share your{" "}
-</span>
-<span 
-              className="relative inline-block"
-              style={{ color: "var(--accent)" }}
->
-              ideas
-<SparklesIcon className="absolute -top-2 -right-8 h-8 w-8 text-yellow-400 animate-pulse" />
-</span>
-<br />
-<span style={{ color: "var(--foreground)" }}>
-              with the world
-</span>
-</h1>
-</div>
- 
-        {/* Subtitle */}
-<p 
-          className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in"
-          style={{ 
-            color: "var(--muted)",
-            animationDelay: "0.1s"
-          }}
->
-          Join our community of writers and readers. Create, share, and discover 
-          amazing content from passionate authors around the globe.
-</p>
- 
+
         {/* CTA Buttons */}
 <div 
           className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in"
@@ -65,14 +34,14 @@ export default function Hero() {
                 href="/create-post" 
                 className="btn btn-primary text-lg px-8 py-3 flex items-center justify-center space-x-2"
 >
-<PencilIcon className="h-5 w-5" />
+<PencilIcon className="h-2 w-2" />
 <span>Start Writing</span>
 </Link>
 <Link 
                 href="#posts" 
                 className="btn btn-secondary text-lg px-8 py-3 flex items-center justify-center space-x-2"
 >
-<BookOpenIcon className="h-5 w-5" />
+<BookOpenIcon className="h-3 w-3" />
 <span>Explore Posts</span>
 </Link>
 </>
@@ -89,7 +58,7 @@ export default function Hero() {
                 href="/auth/signin" 
                 className="btn btn-secondary text-lg px-8 py-3 flex items-center justify-center space-x-2"
 >
-<BookOpenIcon className="h-5 w-5" />
+<BookOpenIcon className="h-3 w-3" />
 <span>Sign In</span>
 </Link>
 </>
@@ -116,35 +85,6 @@ export default function Hero() {
 </p>
 </div>
  
-          <div className="text-center">
-<div 
-              className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: "var(--sidebar-bg)" }}
->
-<UsersIcon className="h-8 w-8" style={{ color: "var(--accent)" }} />
-</div>
-<h3 className="text-lg font-semibold mb-2" style={{ color: "var(--foreground)" }}>
-              Community Driven
-</h3>
-<p className="text-sm" style={{ color: "var(--muted)" }}>
-              Connect with like-minded writers and readers in our growing community.
-</p>
-</div>
- 
-          <div className="text-center">
-<div 
-              className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: "var(--sidebar-bg)" }}
->
-<BookOpenIcon className="h-8 w-8" style={{ color: "var(--accent)" }} />
-</div>
-<h3 className="text-lg font-semibold mb-2" style={{ color: "var(--foreground)" }}>
-              Discover Stories
-</h3>
-<p className="text-sm" style={{ color: "var(--muted)" }}>
-              Explore a diverse collection of articles, tutorials, and personal stories.
-</p>
-</div>
 </div>
  
         {/* Welcome message for authenticated users */}
