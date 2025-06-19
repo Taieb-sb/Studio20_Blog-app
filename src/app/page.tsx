@@ -1,7 +1,8 @@
-// src/app/page.tsx
 import Header from "@/components/Header";
-import Link from "next/link";
-
+import PostCard from "@/components/PostCard";
+import Hero from "@/components/Hero";
+import { BookOpenIcon, UsersIcon, PencilIcon } from "@heroicons/react/24/outline";
+ 
 type Post = {
   _id: string;
   title: string;
@@ -9,79 +10,136 @@ type Post = {
   authorName: string;
   createdAt: string;
 };
-
-export default async function HomePage() {
-  // 1) On récupère la liste des posts depuis notre API
-  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/posts`, { cache: "no-store" });
-  if (!res.ok) {
-    // si l’API renvoie une erreur on peut afficher un message
-    return (
-      <div>
-        <Header />
-        <main className="p-8">
-          <p className="text-red-500">Failed to load posts.</p>
-        </main>
-      </div>
-    );
+ 
+async function getPosts(): Promise<Post[]> {
+  try {
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const res = await fetch(`${baseUrl}/api/posts`, { 
+      cache: "no-store",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!res.ok) {
+      throw new Error('Failed to fetch posts');
+    }
+    return await res.json();
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return [];
   }
-  const posts: Post[] = await res.json();
-
+}
+ 
+export default async function HomePage() {
+  const posts = await getPosts();
+ 
+  const stats = [
+    {
+      name: "Total Posts",
+      value: posts.length.toString(),
+      icon: BookOpenIcon,
+    },
+    {
+      name: "Authors",
+      value: new Set(posts.map(post => post.authorName)).size.toString(),
+      icon: UsersIcon,
+    },
+    {
+      name: "This Month",
+      value: posts.filter(post => {
+        const postDate = new Date(post.createdAt);
+        const now = new Date();
+        return postDate.getMonth() === now.getMonth() && 
+               postDate.getFullYear() === now.getFullYear();
+      }).length.toString(),
+      icon: PencilIcon,
+    },
+  ];
+ 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* 2) Notre barre de navigation / header */}
-      <Header />
-
-      {/* 3) Contenu principal */}
-      <main className="max-w-3xl mx-auto p-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-            My Blog
-          </h1>
-          {/* Le bouton de création de post n’apparaît que si 
-              Header a détecté une session (via useSession) */}
-          <Link
-            href="/create-post"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-          >
-            + New Post
-          </Link>
-        </div>
-
-        {/* 4) Affichage de la liste des articles */}
-        {posts.length === 0 ? (
-          <p className="text-gray-700 dark:text-gray-300">
-            No posts yet.
-          </p>
-        ) : (
-          <ul className="space-y-6">
-            {posts.map((post) => (
-              <li
-                key={post._id}
-                className="p-6 bg-white dark:bg-gray-800 rounded shadow"
-              >
-                <Link
-                  href={`/posts/${post._id}`}
-                  className="text-2xl font-semibold text-blue-600 hover:underline"
-                >
-                  {post.title}
-                </Link>
-                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  By {post.authorName} on{" "}
-                  {new Date(post.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
-                <p className="mt-4 text-gray-800 dark:text-gray-200">
-                  {post.content.substring(0, 150)}…
-                </p>
-              </li>
+<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50" 
+         style={{ backgroundColor: "var(--background)" }}>
+<Header />
+      {/* Hero Section */}
+<Hero />
+      {/* Stats Section */}
+<section className="py-12 border-b" style={{ borderColor: "var(--border)" }}>
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {stats.map((stat) => (
+<div key={stat.name} className="card p-6 text-center animate-fade-in">
+<stat.icon className="mx-auto h-8 w-8 mb-3" style={{ color: "var(--accent)" }} />
+<div className="text-3xl font-bold mb-2" style={{ color: "var(--foreground)" }}>
+                  {stat.value}
+</div>
+<div className="text-sm" style={{ color: "var(--muted)" }}>
+                  {stat.name}
+</div>
+</div>
             ))}
-          </ul>
+</div>
+</div>
+</section>
+ 
+      {/* Posts Section */}
+<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div className="flex justify-between items-center mb-8">
+<div>
+<h2 className="text-3xl font-bold mb-2" style={{ color: "var(--foreground)" }}>
+              Latest Posts
+</h2>
+<p style={{ color: "var(--muted)" }}>
+              Discover insights, tutorials, and stories from our community
+</p>
+</div>
+</div>
+ 
+        {posts.length === 0 ? (
+<div className="card p-12 text-center">
+<BookOpenIcon className="mx-auto h-16 w-16 mb-4" style={{ color: "var(--muted)" }} />
+<h3 className="text-xl font-semibold mb-2" style={{ color: "var(--foreground)" }}>
+              No posts yet
+</h3>
+<p className="mb-6" style={{ color: "var(--muted)" }}>
+              Be the first to share your thoughts and ideas with the community.
+</p>
+</div>
+        ) : (
+<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post, index) => (
+<div
+                key={post._id}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+>
+<PostCard post={post} />
+</div>
+            ))}
+</div>
         )}
-      </main>
-    </div>
+ 
+        {posts.length > 0 && (
+<div className="mt-12 text-center">
+<p style={{ color: "var(--muted)" }}>
+              Showing {posts.length} post{posts.length !== 1 ? 's' : ''}
+</p>
+</div>
+        )}
+</main>
+ 
+      {/* Footer */}
+<footer className="border-t py-12" style={{ borderColor: "var(--border)" }}>
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="text-center">
+<h3 className="text-lg font-semibold mb-2" style={{ color: "var(--foreground)" }}>
+              Studio Blog
+</h3>
+<p style={{ color: "var(--muted)" }}>
+              Built with Next.js, MongoDB, and NextAuth.js
+</p>
+</div>
+</div>
+</footer>
+</div>
   );
 }

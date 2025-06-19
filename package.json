@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.9.1",
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.10",
     "bcryptjs": "^3.0.2",
     "mongodb": "^6.17.0",
@@ -17,7 +18,8 @@
     "next": "15.3.3",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

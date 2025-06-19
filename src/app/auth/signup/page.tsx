@@ -19,7 +19,7 @@ export default function SignupPage() {
     if (res.ok) {
       router.push("/auth/login");
     } else {
-      setError(data.error || "Erreur");
+      setError(data.error || "Error");
     }
   };
 
@@ -42,14 +42,14 @@ export default function SignupPage() {
         required
       />
       <input
-        type="password" placeholder="Mot de passe"
+        type="password" placeholder="password"
         value={form.password}
         onChange={e=>setForm({...form, password: e.target.value})}
         className="w-full mb-4 p-2 border"
         required
       />
       <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-        S’inscrire
+        Signin
       </button>
     </form>
   );

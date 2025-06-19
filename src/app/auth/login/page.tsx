@@ -15,7 +15,7 @@ export default function LoginPage() {
       password: form.password,
     });
     if (res?.error) {
-      setError("Identifiants invalides");
+      setError("Identifiants unvalable");
     } else {
       window.location.href = "/";
     }
@@ -33,7 +33,7 @@ export default function LoginPage() {
         required
       />
       <input
-        type="password" placeholder="Mot de passe"
+        type="password" placeholder="password"
         value={form.password}
         onChange={e=>setForm({...form, password: e.target.value})}
         className="w-full mb-4 p-2 border"
